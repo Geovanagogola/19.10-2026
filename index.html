@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protótipo: Criptografando Letras</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header, section, .interactive-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        h1, h2 {
+            color: #2c3e50;
+        }
+
+        code {
+            background: #eef2f3;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .result {
+            background: #e8f8f5;
+            padding: 15px;
+            border-left: 5px solid #2ecc71;
+            margin-top: 10px;
+            overflow-wrap: anywhere;
+        }
+
+        #outputText {
+            font-weight: bold;
+            font-family: monospace;
+            font-size: 18px;
+        }
+
+        .note {
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Protótipo: Criptografando Letras</h1>
+        <p><strong>Conteúdo:</strong> Introdução à Criptografia e Cifra de César.</p>
+    </header>
+
+    <section>
+        <h2>O que é Criptografia de Letras?</h2>
+
+        <p>
+            A criptografia é uma técnica utilizada para transformar informações
+            em um formato que dificulta sua leitura por pessoas não autorizadas.
+            Um dos métodos históricos mais simples é a
+            <strong>Cifra de César</strong>.
+        </p>
+
+        <p>
+            <strong>Como funciona?</strong> Cada letra do texto original é
+            deslocada um número fixo de posições no alfabeto. Neste exemplo,
+            utilizamos um deslocamento de <strong>3 posições</strong>:
+            A vira D, B vira E, C vira F e assim por diante.
+        </p>
+
+        <p class="note">
+            Observação: a Cifra de César é um método educativo e não deve ser
+            utilizada para proteger informações reais.
+        </p>
+    </section>
+
+    <div class="interactive-box">
+        <h2>Teste o Protótipo em Tempo Real</h2>
+
+        <p>
+            Digite uma mensagem para visualizar o resultado da criptografia.
+        </p>
+
+        <input
+            type="text"
+            id="inputText"
+            placeholder="Digite aqui (ex.: TEXTO)"
+            autocomplete="off"
+        >
+
+        <button onclick="criptografar()">
+            Criptografar Mensagem
+        </button>
+
+        <div id="output" class="result" hidden aria-live="polite">
+            <p><strong>Texto original:</strong> <span id="originalText"></span></p>
+            <p>
+                <strong>Texto criptografado:</strong>
+                <span id="outputText"></span>
+            </p>
+        </div>
+    </div>
+
+    <section>
+        <h2>Explicação do Código Desenvolvido</h2>
+
+        <p>
+            Para fazer este protótipo funcionar, utilizamos JavaScript:
+        </p>
+
+        <ul>
+            <li>
+                Capturamos o conteúdo digitado usando
+                <code>document.getElementById()</code>.
+            </li>
+            <li>
+                Percorremos os caracteres da mensagem com um laço
+                de repetição <code>for</code>.
+            </li>
+            <li>
+                Identificamos as letras do alfabeto e deslocamos cada uma
+                em três posições.
+            </li>
+            <li>
+                Utilizamos o operador módulo <code>% 26</code> para retornar
+                ao início do alfabeto quando necessário.
+            </li>
+            <li>
+                Exibimos o resultado na página sem precisar recarregá-la.
+            </li>
+        </ul>
+
+        <p>
+            <strong>Exemplo:</strong> a palavra <code>XYZ</code> se transforma
+            em <code>ABC</code>.
+        </p>
+    </section>
+
+    <script>
+        function criptografar() {
+            const campo = document.getElementById('inputText');
+            const input = campo.value.toUpperCase();
+
+            let resultado = '';
+
+            for (let i = 0; i < input.length; i++) {
+                let codigo = input.charCodeAt(i);
+
+                // Verifica se o caractere está entre A e Z.
+                if (codigo >= 65 && codigo <= 90) {
+                    // Desloca a letra três posições no alfabeto.
+                    codigo = ((codigo - 65 + 3) % 26) + 65;
+                }
+
+                // Mantém espaços, números e pontuação.
+                resultado += String.fromCharCode(codigo);
+            }
+
+            document.getElementById('originalText').textContent = input;
+            document.getElementById('outputText').textContent = resultado;
+            document.getElementById('output').hidden = false;
+        }
+
+        // Permite criptografar pressionando Enter.
+        document.getElementById('inputText').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                criptografar();
+            }
+        });
+    </script>
+</body>
+</html>
